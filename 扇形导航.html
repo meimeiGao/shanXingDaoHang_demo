@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .wrap {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            right: 30px;
+            bottom: 30px;
+        }
+
+        .wrap .imgList {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+        }
+
+        .wrap .imgList img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 4px;
+            border-radius: 50px;
+        }
+
+        .wrap .home {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url('img/home.png') no-repeat;
+            z-index: 99;
+            border-radius: 50px;
+            transition: 1s;
+
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var flag = true;
+            var homeNode = document.querySelector('.home');
+            var imgNode = document.querySelectorAll('img');
+            var c = -120;
+            homeNode.onclick = function () {
+                if (flag) {
+                    this.style.transform = 'scale(1) rotate(-720deg)';
+
+                    for (var i = 0; i < imgNode.length; i++) {
+                        imgNode[i].style.transition = ".5s " + (0.1 * i) + "s";
+                        imgNode[i].style.transform = 'scale(1) rotate(-720deg)';
+                        imgNode[i].style.left = fun(c, 90 / (imgNode.length - 1) * i).x + 'px';
+                        imgNode[i].style.top = fun(c, 90 / (imgNode.length - 1) * i).y + 'px';
+
+                    }
+
+                } else {
+                    this.style.transform = 'rotate(0)';
+                    for (var i = 0; i < imgNode.length; i++) {
+                        imgNode[i].style.transition = ".5s " + (0.1 * (imgNode.length - 1 - i)) + "s";
+                        imgNode[i].style.transform = 'scale(1)  rotate(0)';
+                        imgNode[i].style.left = 0;
+                        imgNode[i].style.top = 0;
+                    }
+                }
+                flag = !flag
+            };
+
+            function fun(c, deg) {
+                var a = Math.round(c * Math.sin(deg * Math.PI / 180));
+                var b = Math.round(c * Math.cos(deg * Math.PI / 180));
+                return {x: a, y: b};
+            }
+
+            for (var i = 0; i < imgNode.length; i++) {
+                imgNode[i].onclick = function () {
+                    this.style.transition = '0.5s';
+                    this.style.transform = 'scale(2) rotate(-720deg)';
+                    this.style.opacity = 0.1;
+                    this.addEventListener('transitionend', fn);
+                }
+            }
+            function fn() {
+                this.style.transition = '0.2s';
+                this.style.transform = 'scale(1) rotate(-720deg)';
+                this.style.opacity = 1;
+                this.removeEventListener('transitionend', fn);
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <div class="imgList">
+        <img src="img/clos.png" alt="">
+        <img src="img/full.png" alt="">
+        <img src="img/open.png" alt="">
+        <img src="img/prev.png" alt="">
+        <img src="img/refresh.png" alt="">
+    </div>
+    <div class="home">
+
+    </div>
+</div>
+</body>
+</html>
